@@ -42,6 +42,7 @@ const closeBtn = document.getElementById('close-lightbox');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
 const counter = document.getElementById('lightbox-counter');
+const bgMusic = document.getElementById('bg-music');
 
 let allMedia = [];
 let currentIndex = 0;
@@ -77,11 +78,15 @@ function openLightbox(index) {
         lightboxImg.classList.remove('hidden');
         lightboxVideo.classList.add('hidden');
         lightboxVideo.pause();
+        // Reset volume if it was lowered
+        if (bgMusic) bgMusic.volume = 1.0;
     } else {
         lightboxVideo.src = media.src;
         lightboxVideo.classList.remove('hidden');
         lightboxImg.classList.add('hidden');
         lightboxVideo.play();
+        // Lower background music volume when video plays
+        if (bgMusic) bgMusic.volume = 0.2;
     }
     
     counter.textContent = `${index + 1} / ${allMedia.length}`;
@@ -93,6 +98,8 @@ function closeLightbox() {
     lightbox.classList.remove('active');
     lightboxVideo.pause();
     document.body.style.overflow = '';
+    // Restore music volume when closing
+    if (bgMusic) bgMusic.volume = 1.0;
 }
 
 function nextMedia() {
